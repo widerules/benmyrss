@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<EditText android:id="@+id/rssname_edit"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:capitalize="none" android:textAppearance="?android:attr/textAppearanceMedium"
+		android:hint="在此输入RSS名称" />
+	<EditText android:id="@+id/rssaddr_edit"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:capitalize="none" android:textAppearance="?android:attr/textAppearanceMedium"
+		android:hint="在此输入RSS地址" />
+	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
+		android:text="请选择分类:" android:textAppearance="?android:attr/textAppearanceLarge"
+		android:layout_height="wrap_content"></TextView>
+	<Spinner android:id="@+id/spCategory" android:layout_height="wrap_content"
+		android:layout_width="fill_parent"></Spinner>
+	<LinearLayout style="@android:style/ButtonBar"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<Button android:text="确定" android:id="@+id/btnOKRss"
+			android:layout_width="150dip" android:layout_height="wrap_content"></Button>
+		<Button android:text="取消" android:id="@+id/btnCancelRss"
+			android:layout_width="150dip" android:layout_height="wrap_content"></Button>
+	</LinearLayout>
+</LinearLayout>
