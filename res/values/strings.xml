@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">我的阅读器</string>
+    <string name="alert">提示信息</string>
+    <string name="btn_ok">确定</string>
+    <string name="btn_cancel">取消</string>
+    <string name="del_alert">您确定要删除吗？</string>
+    <string name="default_alert">您确定将该RSS设置为默认吗？</string>
+    <string name="addCategory_alert">添加分类</string>
+    <string name="editCategory_alert">编辑分类</string>
+     <string name="addRSS_alert">添加RSS</string>
+    <string name="editRSS_alert">编辑RSS</string>
+</resources>
