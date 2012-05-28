@@ -101,8 +101,6 @@ public class DBHelper extends SQLiteOpenHelper {
 				Category c = new Category();
 				try {
 					c.setId(cursor.getString(cursor.getColumnIndex("Id")));
-//					c.setName(new String(cursor.getBlob(cursor
-//							.getColumnIndex("Name")), "GBK"));
 					c.setName(cursor.getString(cursor.getColumnIndex("Name")));
 				} catch (Exception e) {
 					Log.d("MyDebug", e.getMessage());
@@ -127,8 +125,6 @@ public class DBHelper extends SQLiteOpenHelper {
 			while (cursor.moveToNext()) {
 				RSSAddr c = new RSSAddr();
 				c.setId(cursor.getString(cursor.getColumnIndex("Id")));
-//				c.setName(new String(cursor.getBlob(cursor
-//						.getColumnIndex("Name")), "GBK"));
 				c.setName(cursor.getString(cursor.getColumnIndex("Name")));
 				c.setCategoryId(cursor.getString(cursor
 						.getColumnIndex("CategoryId")));
@@ -152,8 +148,6 @@ public class DBHelper extends SQLiteOpenHelper {
 					"URL","CategoryId"}, "Id=?", new String[] { id }, null, null, null);
 			while (cursor.moveToNext()) {
 				r.setId(cursor.getString(cursor.getColumnIndex("Id")));
-//				r.setName(new String(cursor.getBlob(cursor
-//						.getColumnIndex("Name")), "GBK"));
 				r.setName(cursor.getString(cursor.getColumnIndex("Name")));
 				r.setURL(cursor.getString(cursor.getColumnIndex("URL")));
 				r.setCategoryId(cursor.getString(cursor.getColumnIndex("CategoryId")));
@@ -174,8 +168,6 @@ public class DBHelper extends SQLiteOpenHelper {
 					"URL" }, "Flag=?", new String[] { "1" }, null, null, null);
 			while (cursor.moveToNext()) {
 				r.setId(cursor.getString(cursor.getColumnIndex("Id")));
-//				r.setName(new String(cursor.getBlob(cursor
-//						.getColumnIndex("Name")), "GBK"));
 				r.setName(cursor.getString(cursor.getColumnIndex("Name")));
 				r.setURL(cursor.getString(cursor.getColumnIndex("URL")));
 			}
