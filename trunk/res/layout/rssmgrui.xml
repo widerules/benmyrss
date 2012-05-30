@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" android:gravity="bottom">
+	android:orientation="vertical" android:gravity="bottom" android:background="@drawable/bgpic1">
 
 	<ListView android:layout_height="400px" android:id="@+id/rssLv"
-		android:layout_width="fill_parent"></ListView>
+		android:layout_width="fill_parent"  android:cacheColorHint="#00000000"></ListView>
 
 	<LinearLayout style="@android:style/ButtonBar"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

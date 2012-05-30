@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:gravity="bottom">
+	android:layout_height="fill_parent" android:gravity="bottom"
+	android:background="@drawable/bgpic">
 	<ListView android:layout_width="fill_parent" android:id="@+id/RssList"
-		android:layout_height="400px" />
+		android:layout_height="400px" android:cacheColorHint="#00000000"/>
 	<LinearLayout style="@android:style/ButtonBar"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:orientation="horizontal">

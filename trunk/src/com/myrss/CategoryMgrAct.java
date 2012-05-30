@@ -10,11 +10,11 @@ import com.myrss.util.DBHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +54,7 @@ public class CategoryMgrAct extends Activity {
 	private void initData() {
 		final ListView categoryLv = (ListView) findViewById(R.id.categoryLv);
 		List<Category> lsCategories = dbhelper.GetCategoryList(dbhelper);
+		data.clear();
 		for (Category c : lsCategories) {
 			HashMap<String, String> item = new HashMap<String, String>();
 			item.put("Id", c.getId());
@@ -85,7 +86,6 @@ public class CategoryMgrAct extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int arg2,
 					long arg3) {
-				Log.d("MyDebug","管理目录");
 				Intent intent = new Intent();
 				Bundle value = new Bundle();
 				SparseBooleanArray sbArray = categoryLv
@@ -140,9 +140,10 @@ public class CategoryMgrAct extends Activity {
 									dbhelper.ExeSQL(dbhelper,
 											"DELETE FROM RssAddr WHERE CategoryId='"
 													+ id + "'");// 删除分类下的RSS
-									data.remove(i);// 从list中移除
+									data.remove(i);//从list中移除
 								}
 							}
+							
 							adapter.notifyDataSetChanged();// 刷新数据
 						}
 					});
@@ -188,12 +189,17 @@ public class CategoryMgrAct extends Activity {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EditText tvcname = (EditText) textEntryView
 								.findViewById(R.id.categoryname_edit);// 获取分类名称
-						String sql = "INSERT INTO Category(Name) VALUES('"
-								+ tvcname.getText() + "')";
-						dbhelper.ExeSQL(dbhelper, sql);
+						
+						ContentValues initialValues = new ContentValues();
+						initialValues.put("Name", tvcname.getText().toString());
+						HashMap<String, String> item = new HashMap<String, String>();
+						item.put("Id", dbhelper.Add(dbhelper, "Category", initialValues));
+						item.put("Name",tvcname.getText().toString());
+						data.add(item);
+						
+						adapter.notifyDataSetChanged();
 					}
 				});
-		// adapter.notifyDataSetChanged();// 刷新数据 无效
 		builder.setNegativeButton(R.string.btn_cancel,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
@@ -221,9 +227,10 @@ public class CategoryMgrAct extends Activity {
 								+ tvcname.getText().toString() + "' WHERE Id='"
 								+ id + "'";
 						dbhelper.ExeSQL(dbhelper, sql);
+						
+						adapter.notifyDataSetChanged();
 					}
 				});
-		// adapter.notifyDataSetChanged();// 刷新数据 无效
 		builder.setNegativeButton(R.string.btn_cancel,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {

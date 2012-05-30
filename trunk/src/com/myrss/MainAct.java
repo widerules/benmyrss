@@ -8,16 +8,20 @@ import org.xml.sax.XMLReader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.myrss.R;
 import com.myrss.model.RSSAddr;
@@ -61,15 +65,17 @@ public class MainAct extends Activity implements OnItemClickListener {
 			startActivity(intent);
 		}
 	};
+	
 	// 选择RSS
 	private Button.OnClickListener btnSelListener = new Button.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent();
 			intent.setClass(MainAct.this, SelRSSAct.class);
-			startActivityForResult(intent, 0);//获取有返回结果的activity
+			startActivityForResult(intent, 0);// 获取有返回结果的activity
 		}
 	};
+	
 	// 删除RSS
 	private Button.OnClickListener btnDelListener = new Button.OnClickListener() {
 		@Override
@@ -108,6 +114,7 @@ public class MainAct extends Activity implements OnItemClickListener {
 			builder.create().show();
 		}
 	};
+	
 	// 设置默认RSS
 	private Button.OnClickListener btnDefaultListener = new Button.OnClickListener() {
 		@Override
@@ -145,6 +152,7 @@ public class MainAct extends Activity implements OnItemClickListener {
 			builder.create().show();
 		}
 	};
+	
 	// 刷新列表
 	private Button.OnClickListener btnRefreshListener = new Button.OnClickListener() {
 		@Override
@@ -176,7 +184,7 @@ public class MainAct extends Activity implements OnItemClickListener {
 
 	// 显示列表
 	private void showListView(String id) {
-		DBHelper dbhelper =DBHelper.GetInstance(MainAct.this);
+		DBHelper dbhelper = DBHelper.GetInstance(MainAct.this);
 		if (id.equals("")) {// id为空获取默认RSS
 			rssAddr = dbhelper.GetDefaultRSS(dbhelper);
 		} else {// 不为空获取指定ID的RSS
@@ -226,5 +234,73 @@ public class MainAct extends Activity implements OnItemClickListener {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	// 设置菜单
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add(Menu.NONE, Menu.FIRST + 1, 5, "退出").setIcon(
+				android.R.drawable.ic_menu_delete);
+		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "刷新").setIcon(
+				android.R.drawable.ic_menu_edit);
+		menu.add(Menu.NONE, Menu.FIRST + 3, 6, "帮助").setIcon(
+				android.R.drawable.ic_menu_help);
+		menu.add(Menu.NONE, Menu.FIRST + 4, 1, "添加").setIcon(
+				android.R.drawable.ic_menu_add);
+		menu.add(Menu.NONE, Menu.FIRST + 5, 4, "详细").setIcon(
+				android.R.drawable.ic_menu_info_details);
+		menu.add(Menu.NONE, Menu.FIRST + 6, 3, "分享").setIcon(
+				android.R.drawable.ic_menu_send);
+		return true;
+	}
+
+	@Override//菜单按钮点击事件
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST + 1:
+			dialog();
+			break;
+		case Menu.FIRST + 2:
+			this.showListView("");
+			break;
+		case Menu.FIRST + 3:
+			Toast.makeText(this, "帮助菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		case Menu.FIRST + 4:
+			Toast.makeText(this, "添加菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		case Menu.FIRST + 5:
+			Toast.makeText(this, "详细菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		case Menu.FIRST + 6:
+			Toast.makeText(this, "分享菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		}
+		return false;
+	}
+
+	//退出提示框
+	protected void dialog() {
+		AlertDialog.Builder builder = new Builder(MainAct.this);
+		builder.setMessage("您确定要退出吗?");
+		builder.setTitle("提示");
+		builder.setPositiveButton("确认",
+				new android.content.DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						android.os.Process.killProcess(android.os.Process
+								.myPid());
+					}
+				});
+		builder.setNegativeButton("取消",
+				new android.content.DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		builder.create().show();
 	}
 }
