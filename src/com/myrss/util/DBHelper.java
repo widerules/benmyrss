@@ -56,13 +56,13 @@ public class DBHelper extends SQLiteOpenHelper {
 	}
 
 	// 插入数据
-	public boolean Add(DBHelper dbHelper, String tbname, ContentValues values) {
+	public String Add(DBHelper dbHelper, String tbname, ContentValues values) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
-			db.insert(tbname, null, values);
-			return true;
+			long rowid = db.insert(tbname, null, values);
+			return String.valueOf(rowid);
 		} catch (SQLException e) {
-			return false;
+			return "-1";
 		}
 	}
 
@@ -145,12 +145,14 @@ public class DBHelper extends SQLiteOpenHelper {
 		RSSAddr r = new RSSAddr();
 		try {
 			Cursor cursor = db.query("RssAddr", new String[] { "Id", "Name",
-					"URL","CategoryId"}, "Id=?", new String[] { id }, null, null, null);
+					"URL", "CategoryId" }, "Id=?", new String[] { id }, null,
+					null, null);
 			while (cursor.moveToNext()) {
 				r.setId(cursor.getString(cursor.getColumnIndex("Id")));
 				r.setName(cursor.getString(cursor.getColumnIndex("Name")));
 				r.setURL(cursor.getString(cursor.getColumnIndex("URL")));
-				r.setCategoryId(cursor.getString(cursor.getColumnIndex("CategoryId")));
+				r.setCategoryId(cursor.getString(cursor
+						.getColumnIndex("CategoryId")));
 			}
 			cursor.close();
 		} catch (SQLException e) {
