@@ -17,10 +17,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -37,17 +38,6 @@ public class CategoryMgrAct extends Activity {
 		super.onCreate(icicle);
 		setContentView(R.layout.categorymgrui);
 		initData();
-		initWidget();
-	}
-
-	// 初始化组件
-	private void initWidget() {
-		Button btnAddCategory = (Button) findViewById(R.id.btnAddCategory);
-		Button btnDelCategory = (Button) findViewById(R.id.btnDelCategory);
-		Button btnEditCategory = (Button) findViewById(R.id.btnEditCategory);
-		btnAddCategory.setOnClickListener(btnAddCategoryListener);
-		btnDelCategory.setOnClickListener(btnDelCategoryListener);
-		btnEditCategory.setOnClickListener(btnEditCategoryListener);
 	}
 
 	// 初始化数据
@@ -104,77 +94,6 @@ public class CategoryMgrAct extends Activity {
 			}
 		});
 	}
-
-	// 添加分类
-	private Button.OnClickListener btnAddCategoryListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			buildDialog(CategoryMgrAct.this).show();
-		}
-	};
-	// 删除分类
-	private Button.OnClickListener btnDelCategoryListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			// 设置提示框
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					CategoryMgrAct.this);
-			builder.setIcon(R.drawable.alert);
-			builder.setTitle(R.string.alert);
-			builder.setMessage(R.string.del_alert);
-			// 点击确定
-			builder.setPositiveButton(R.string.btn_ok,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ListView categoryLv = (ListView) findViewById(R.id.categoryLv);
-							// 获取所有选中项的ID
-							SparseBooleanArray sbArray = categoryLv
-									.getCheckedItemPositions();
-							for (int i = 0; i < data.size(); i++) {
-								if (sbArray.valueAt(i)) {
-									String id = String.valueOf(categoryLv
-											.getAdapter().getItemId(
-													sbArray.keyAt(i)));
-									dbhelper.Delete(dbhelper, "Category", id);// 删除RSS
-									dbhelper.ExeSQL(dbhelper,
-											"DELETE FROM RssAddr WHERE CategoryId='"
-													+ id + "'");// 删除分类下的RSS
-									data.remove(i);//从list中移除
-								}
-							}
-							
-							adapter.notifyDataSetChanged();// 刷新数据
-						}
-					});
-			// 点击取消
-			builder.setNegativeButton(R.string.btn_cancel,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-			builder.create().show();
-		}
-	};
-	// 编辑分类
-	private Button.OnClickListener btnEditCategoryListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			ListView categoryLv = (ListView) findViewById(R.id.categoryLv);
-			SparseBooleanArray sbArray = categoryLv.getCheckedItemPositions();
-			for (int i = 0; i < data.size(); i++) {
-				if (sbArray.valueAt(i)) {
-					@SuppressWarnings("unchecked")
-					HashMap<String, String> c = (HashMap<String, String>) categoryLv
-							.getAdapter().getItem(sbArray.keyAt(i));
-					buildEditDialog(CategoryMgrAct.this, c.get("Id"), c.get("Name"))// 获取选中项并传递数据
-							.show();
-				}
-			}
-		}
-	};
 
 	// 添加分类Dialog
 	private Dialog buildDialog(Context context) {
@@ -238,5 +157,94 @@ public class CategoryMgrAct extends Activity {
 					}
 				});
 		return builder.create();
+	}
+	
+	@Override
+	// 设置菜单
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add(Menu.NONE, Menu.FIRST + 1, 1, "添加分类").setIcon(
+				android.R.drawable.ic_menu_add);
+		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "编辑分类").setIcon(
+				android.R.drawable.ic_menu_edit);
+		menu.add(Menu.NONE, Menu.FIRST + 3, 3, "删除分类").setIcon(
+				android.R.drawable.ic_menu_delete);
+		return true;
+	}
+
+	@Override
+	// 菜单按钮点击事件
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST + 1:
+			buildDialog(CategoryMgrAct.this).show();
+			break;
+		case Menu.FIRST + 2:
+			EditCategoryDialog();
+			break;
+		case Menu.FIRST + 3:
+			DeleteCategoryDialog();
+			break;
+		}
+		return false;
+	}
+	
+	//编辑分类
+	private void EditCategoryDialog() {
+		ListView categoryLv = (ListView) findViewById(R.id.categoryLv);
+		SparseBooleanArray sbArray = categoryLv.getCheckedItemPositions();
+		for (int i = 0; i < data.size(); i++) {
+			if (sbArray.valueAt(i)) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> c = (HashMap<String, String>) categoryLv
+						.getAdapter().getItem(sbArray.keyAt(i));
+				buildEditDialog(CategoryMgrAct.this, c.get("Id"), c.get("Name"))// 获取选中项并传递数据
+						.show();
+			}
+		}
+	}
+	
+	//删除分类
+	private void DeleteCategoryDialog() {
+		// 设置提示框
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				CategoryMgrAct.this);
+		builder.setIcon(R.drawable.alert);
+		builder.setTitle(R.string.alert);
+		builder.setMessage(R.string.del_alert);
+		// 点击确定
+		builder.setPositiveButton(R.string.btn_ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						ListView categoryLv = (ListView) findViewById(R.id.categoryLv);
+						// 获取所有选中项的ID
+						SparseBooleanArray sbArray = categoryLv
+								.getCheckedItemPositions();
+						for (int i = 0; i < data.size(); i++) {
+							if (sbArray.valueAt(i)) {
+								String id = String.valueOf(categoryLv
+										.getAdapter().getItemId(
+												sbArray.keyAt(i)));
+								dbhelper.Delete(dbhelper, "Category", id);// 删除RSS
+								dbhelper.ExeSQL(dbhelper,
+										"DELETE FROM RssAddr WHERE CategoryId='"
+												+ id + "'");// 删除分类下的RSS
+								data.remove(i);//从list中移除
+							}
+						}
+						
+						adapter.notifyDataSetChanged();// 刷新数据
+					}
+				});
+		// 点击取消
+		builder.setNegativeButton(R.string.btn_cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		builder.create().show();
 	}
 }

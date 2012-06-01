@@ -3,20 +3,6 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical" android:gravity="bottom" android:background="@drawable/bgpic1">
 
-	<ListView android:layout_height="400px" android:id="@+id/rssLv"
+	<ListView android:layout_height="fill_parent" android:id="@+id/rssLv"
 		android:layout_width="fill_parent"  android:cacheColorHint="#00000000"></ListView>
-
-	<LinearLayout style="@android:style/ButtonBar"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<Button android:id="@+id/btnAddRss" android:text="添加源"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnDelRss" android:text="删除源"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnEditRss" android:text="编辑源"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-	</LinearLayout>
 </LinearLayout>

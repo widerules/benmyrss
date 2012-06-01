@@ -45,7 +45,7 @@ public class RSSFeed {
 		return data;
 	}
 
-	int getItemCount() {
+	public int getItemCount() {
 		return itemcount;
 	}
 
