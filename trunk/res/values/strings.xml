@@ -10,4 +10,5 @@
     <string name="editCategory_alert">编辑分类</string>
      <string name="addRSS_alert">添加RSS</string>
     <string name="editRSS_alert">编辑RSS</string>
+    <string name="browse_name">Mini浏览器</string>
 </resources>

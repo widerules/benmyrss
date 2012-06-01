@@ -18,11 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
-
 import com.myrss.R;
 import com.myrss.model.RSSAddr;
 import com.myrss.model.RSSFeed;
@@ -38,128 +35,8 @@ public class MainAct extends Activity implements OnItemClickListener {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.mainui);
-		initWidget();
-		showListView("");// 加载默认RSS
+		showListView("");
 	}
-
-	// 初始化组件
-	private void initWidget() {
-		Button btnMgr = (Button) findViewById(R.id.btnMgr);
-		Button btnSel = (Button) findViewById(R.id.btnSel);
-		Button btnDel = (Button) findViewById(R.id.btnDel);
-		Button btnRefresh = (Button) findViewById(R.id.btnRefresh);
-		Button btnDefault = (Button) findViewById(R.id.btnDefault);
-		btnMgr.setOnClickListener(btnMgrListener);
-		btnSel.setOnClickListener(btnSelListener);
-		btnDel.setOnClickListener(btnDelListener);
-		btnDefault.setOnClickListener(btnDefaultListener);
-		btnRefresh.setOnClickListener(btnRefreshListener);
-	}
-
-	// 管理RSS
-	private Button.OnClickListener btnMgrListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent();
-			intent.setClass(MainAct.this, CategoryMgrAct.class);
-			startActivity(intent);
-		}
-	};
-	
-	// 选择RSS
-	private Button.OnClickListener btnSelListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent();
-			intent.setClass(MainAct.this, SelRSSAct.class);
-			startActivityForResult(intent, 0);// 获取有返回结果的activity
-		}
-	};
-	
-	// 删除RSS
-	private Button.OnClickListener btnDelListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (feed == null) {
-				return;
-			}
-			// 设置提示框
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainAct.this);
-			builder.setIcon(R.drawable.alert);
-			builder.setTitle(R.string.alert);
-			builder.setMessage(R.string.del_alert);
-			// 点击确定
-			builder.setPositiveButton(R.string.btn_ok,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							DBHelper dbHelper = DBHelper
-									.GetInstance(MainAct.this);
-							if (dbHelper.Delete(dbHelper, "RssAddr",
-									feed.getId())) {// 根据ID删除RSS
-								showListView("");
-							} else {
-								setTitle("不好意思程序出错啦");
-							}
-						}
-					});
-			// 点击取消
-			builder.setNegativeButton(R.string.btn_cancel,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-			builder.create().show();
-		}
-	};
-	
-	// 设置默认RSS
-	private Button.OnClickListener btnDefaultListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (feed == null) {
-				return;
-			}
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainAct.this);
-			builder.setIcon(R.drawable.alert);
-			builder.setTitle(R.string.alert);
-			builder.setMessage(R.string.default_alert);
-			// 点击确定
-			builder.setPositiveButton(R.string.btn_ok,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							DBHelper dbHelper = DBHelper
-									.GetInstance(MainAct.this);
-							// 首先清空所有的RSS flag标记 然后设置当前的RSS flag为1
-							String clearsql = "UPDATE RssAddr SET Flag='0'";
-							dbHelper.ExeSQL(dbHelper, clearsql);
-							String sql = "UPDATE RssAddr SET Flag='1' WHERE Id="
-									+ feed.getId();
-							dbHelper.ExeSQL(dbHelper, sql);
-						}
-					});
-			// 点击取消
-			builder.setNegativeButton(R.string.btn_cancel,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-			builder.create().show();
-		}
-	};
-	
-	// 刷新列表
-	private Button.OnClickListener btnRefreshListener = new Button.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			showListView("");
-		}
-	};
 
 	// 获取数据
 	private RSSFeed getFeed(String urlString) {
@@ -193,14 +70,15 @@ public class MainAct extends Activity implements OnItemClickListener {
 		String url = rssAddr.getURL();
 		Log.d("MyDebug", "url: " + url);
 		feed = getFeed(url);
+		
 		ListView itemlist = (ListView) findViewById(R.id.RssList);
 		if (feed == null) {
 			setTitle("RSS源地址无效,请您重新选择");
-			itemlist.setAdapter(null);
 			return;
 		}
+		
 		feed.setId(rssAddr.getId());
-		setTitle(rssAddr.getName());
+		setTitle(rssAddr.getName()+"("+feed.getItemCount()+"条待阅读)");
 		SimpleAdapter adapter = new SimpleAdapter(this,
 				feed.getAllItemsForListView(),
 				android.R.layout.simple_list_item_2, new String[] {
@@ -244,18 +122,19 @@ public class MainAct extends Activity implements OnItemClickListener {
 				android.R.drawable.ic_menu_delete);
 		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "刷新").setIcon(
 				android.R.drawable.ic_menu_edit);
-		menu.add(Menu.NONE, Menu.FIRST + 3, 6, "帮助").setIcon(
+		menu.add(Menu.NONE, Menu.FIRST + 3, 6, "删除").setIcon(
 				android.R.drawable.ic_menu_help);
-		menu.add(Menu.NONE, Menu.FIRST + 4, 1, "添加").setIcon(
+		menu.add(Menu.NONE, Menu.FIRST + 4, 1, "管理").setIcon(
 				android.R.drawable.ic_menu_add);
-		menu.add(Menu.NONE, Menu.FIRST + 5, 4, "详细").setIcon(
+		menu.add(Menu.NONE, Menu.FIRST + 5, 4, "默认").setIcon(
 				android.R.drawable.ic_menu_info_details);
-		menu.add(Menu.NONE, Menu.FIRST + 6, 3, "分享").setIcon(
+		menu.add(Menu.NONE, Menu.FIRST + 6, 3, "选择").setIcon(
 				android.R.drawable.ic_menu_send);
 		return true;
 	}
 
-	@Override//菜单按钮点击事件
+	@Override
+	// 菜单按钮点击事件
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case Menu.FIRST + 1:
@@ -265,22 +144,99 @@ public class MainAct extends Activity implements OnItemClickListener {
 			this.showListView("");
 			break;
 		case Menu.FIRST + 3:
-			Toast.makeText(this, "帮助菜单被点击了", Toast.LENGTH_LONG).show();
+			DeleteDialog();
 			break;
 		case Menu.FIRST + 4:
-			Toast.makeText(this, "添加菜单被点击了", Toast.LENGTH_LONG).show();
+			Intent intent = new Intent();
+			intent.setClass(MainAct.this, CategoryMgrAct.class);
+			startActivity(intent);
 			break;
 		case Menu.FIRST + 5:
-			Toast.makeText(this, "详细菜单被点击了", Toast.LENGTH_LONG).show();
+			SetDefaultDialog();
 			break;
 		case Menu.FIRST + 6:
-			Toast.makeText(this, "分享菜单被点击了", Toast.LENGTH_LONG).show();
+			SelectRssDialog();
 			break;
 		}
 		return false;
 	}
 
-	//退出提示框
+	// 选择RSS
+	private void SelectRssDialog() {
+		Intent intent = new Intent();
+		intent.setClass(MainAct.this, SelRSSAct.class);
+		startActivityForResult(intent, 0);// 获取有返回结果的activity
+	}
+
+	// 设置默认RSS
+	private void SetDefaultDialog() {
+		if (feed == null) {
+			return;
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainAct.this);
+		builder.setIcon(R.drawable.alert);
+		builder.setTitle(R.string.alert);
+		builder.setMessage(R.string.default_alert);
+		// 点击确定
+		builder.setPositiveButton(R.string.btn_ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DBHelper dbHelper = DBHelper.GetInstance(MainAct.this);
+						// 首先清空所有的RSS flag标记 然后设置当前的RSS flag为1
+						String clearsql = "UPDATE RssAddr SET Flag='0' WHERE CategoryId='"+rssAddr.getCategoryId()+"'";
+						dbHelper.ExeSQL(dbHelper, clearsql);
+						String sql = "UPDATE RssAddr SET Flag='1' WHERE Id="
+								+ feed.getId();
+						dbHelper.ExeSQL(dbHelper, sql);
+					}
+				});
+		// 点击取消
+		builder.setNegativeButton(R.string.btn_cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		builder.create().show();
+	}
+
+	// 删除RSS
+	private void DeleteDialog() {
+		if (feed == null) {
+			return;
+		}
+		// 设置提示框
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainAct.this);
+		builder.setIcon(R.drawable.alert);
+		builder.setTitle(R.string.alert);
+		builder.setMessage(R.string.del_alert);
+		// 点击确定
+		builder.setPositiveButton(R.string.btn_ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DBHelper dbHelper = DBHelper.GetInstance(MainAct.this);
+						if (dbHelper.Delete(dbHelper, "RssAddr", feed.getId())) {// 根据ID删除RSS
+							showListView("");
+						} else {
+							setTitle("不好意思程序出错啦");
+						}
+					}
+				});
+		// 点击取消
+		builder.setNegativeButton(R.string.btn_cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		builder.create().show();
+	}
+
+	// 退出提示框
 	protected void dialog() {
 		AlertDialog.Builder builder = new Builder(MainAct.this);
 		builder.setMessage("您确定要退出吗?");

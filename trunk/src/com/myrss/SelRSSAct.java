@@ -3,6 +3,8 @@ package com.myrss;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -19,7 +21,7 @@ public class SelRSSAct extends Activity {
 
 		ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expGroup);
 		expandableListView.setAdapter(new ExpandableAdapter(this));
-		//单击某一个子项
+		// 单击某一个子项
 		expandableListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
@@ -30,12 +32,34 @@ public class SelRSSAct extends Activity {
 				Intent intent = new Intent();
 				intent = intent.setClass(SelRSSAct.this, MainAct.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("ID", c.getId());//添加数据
+				bundle.putString("ID", c.getId());// 添加数据
 				intent.putExtras(bundle);
-				SelRSSAct.this.setResult(RESULT_OK, intent);//RESULT_OK是返回状态码
+				SelRSSAct.this.setResult(RESULT_OK, intent);// RESULT_OK是返回状态码
 				SelRSSAct.this.finish();
 				return false;
 			}
 		});
+	}
+
+	@Override
+	// 设置菜单
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add(Menu.NONE, Menu.FIRST + 1, 1, "Mini浏览器").setIcon(
+				android.R.drawable.ic_menu_send);
+		return true;
+	}
+
+	@Override
+	// 菜单按钮点击事件
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST + 1:
+			Intent intent = new Intent();
+			intent.setClass(SelRSSAct.this, BrowseAct.class);
+			startActivity(intent);
+			break;
+		}
+		return false;
 	}
 }

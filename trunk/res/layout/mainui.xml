@@ -4,24 +4,5 @@
 	android:layout_height="fill_parent" android:gravity="bottom"
 	android:background="@drawable/bgpic">
 	<ListView android:layout_width="fill_parent" android:id="@+id/RssList"
-		android:layout_height="400px" android:cacheColorHint="#00000000"/>
-	<LinearLayout style="@android:style/ButtonBar"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<Button android:id="@+id/btnRefresh" android:text="刷新"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnMgr" android:text="管理"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnSel" android:text="选择"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnDefault" android:text="默认"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" />
-		<Button android:id="@+id/btnDel" android:text="删除"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1"/>
-	</LinearLayout>
+		android:layout_height="fill_parent" android:cacheColorHint="#00000000"/>
 </LinearLayout>

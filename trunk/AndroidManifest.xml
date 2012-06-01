@@ -14,5 +14,6 @@
 		<activity android:name="SelRSSAct" android:label="@string/app_name" />
 		<activity android:name="RssMgrAct" android:label="@string/app_name" />
 		<activity android:name="RssAct" android:label="@string/app_name" />
+		<activity android:name="BrowseAct" android:label="@string/browse_name" />
 	</application>
 </manifest>

@@ -4,20 +4,6 @@
 	android:orientation="vertical" android:gravity="bottom" 
 	android:background="@drawable/bgpic2">
 	
-	<ListView android:layout_height="400px" android:id="@+id/categoryLv"
+	<ListView android:layout_height="fill_parent" android:id="@+id/categoryLv"
 		android:layout_width="fill_parent"  android:cacheColorHint="#00000000"></ListView>
-
-	<LinearLayout style="@android:style/ButtonBar"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<Button android:id="@+id/btnAddCategory" android:text="添加分类"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1"/>
-		<Button android:id="@+id/btnDelCategory" android:text="删除分类"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1" android:background="#00000000" />
-		<Button android:id="@+id/btnEditCategory" android:text="编辑分类"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:layout_weight="1"/>
-	</LinearLayout>
 </LinearLayout>
