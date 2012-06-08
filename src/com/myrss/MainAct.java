@@ -1,8 +1,10 @@
 package com.myrss;
 
 import java.net.URL;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -13,29 +15,36 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import com.myrss.R;
+
 import com.myrss.model.RSSAddr;
 import com.myrss.model.RSSFeed;
 import com.myrss.model.RSSItem;
 import com.myrss.sax.RSSHandler;
 import com.myrss.util.DBHelper;
 
-public class MainAct extends Activity implements OnItemClickListener {
+public class MainAct extends Activity implements OnItemClickListener,
+		OnGestureListener {
 
 	private RSSFeed feed = null;
 	private RSSAddr rssAddr = null;
+	private GestureDetector detector = null;
 
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.mainui);
+		detector = new GestureDetector(this);
 		showListView("");
+
 	}
 
 	// 获取数据
@@ -70,15 +79,15 @@ public class MainAct extends Activity implements OnItemClickListener {
 		String url = rssAddr.getURL();
 		Log.d("MyDebug", "url: " + url);
 		feed = getFeed(url);
-		
+
 		ListView itemlist = (ListView) findViewById(R.id.RssList);
 		if (feed == null) {
 			setTitle("RSS源地址无效,请您重新选择");
 			return;
 		}
-		
+
 		feed.setId(rssAddr.getId());
-		setTitle(rssAddr.getName()+"("+feed.getItemCount()+"条待阅读)");
+		setTitle(rssAddr.getName() + "(" + feed.getItemCount() + "条待阅读)");
 		SimpleAdapter adapter = new SimpleAdapter(this,
 				feed.getAllItemsForListView(),
 				android.R.layout.simple_list_item_2, new String[] {
@@ -184,7 +193,8 @@ public class MainAct extends Activity implements OnItemClickListener {
 					public void onClick(DialogInterface dialog, int which) {
 						DBHelper dbHelper = DBHelper.GetInstance(MainAct.this);
 						// 首先清空所有的RSS flag标记 然后设置当前的RSS flag为1
-						String clearsql = "UPDATE RssAddr SET Flag='0' WHERE CategoryId='"+rssAddr.getCategoryId()+"'";
+						String clearsql = "UPDATE RssAddr SET Flag='0' WHERE CategoryId='"
+								+ rssAddr.getCategoryId() + "'";
 						dbHelper.ExeSQL(dbHelper, clearsql);
 						String sql = "UPDATE RssAddr SET Flag='1' WHERE Id="
 								+ feed.getId();
@@ -259,4 +269,56 @@ public class MainAct extends Activity implements OnItemClickListener {
 				});
 		builder.create().show();
 	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		if (e1.getX() - e2.getX() > 200) {
+			this.startActivity(new Intent(this, SelRSSAct.class));
+		}
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.detector.onTouchEvent(event);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		this.detector.onTouchEvent(ev);
+		return super.dispatchTouchEvent(ev);
+	}
+
 }
