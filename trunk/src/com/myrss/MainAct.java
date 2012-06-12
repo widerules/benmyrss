@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.myrss.model.RSSAddr;
 import com.myrss.model.RSSFeed;
@@ -272,7 +273,7 @@ public class MainAct extends Activity implements OnItemClickListener,
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
+		Toast.makeText(getApplicationContext(), "向下滑动屏幕",Toast.LENGTH_SHORT).show();
 		return false;
 	}
 
@@ -287,14 +288,13 @@ public class MainAct extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-
+		Toast.makeText(getApplicationContext(), "长时间触摸屏幕",Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		// TODO Auto-generated method stub
+		Toast.makeText(getApplicationContext(), "滚屏",Toast.LENGTH_SHORT).show();
 		return false;
 	}
 
