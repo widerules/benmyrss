@@ -24,27 +24,23 @@ public final class R {
     }
     public static final class id {
         public static final int RssList=0x7f05000b;
-        public static final int btnCancelRss=0x7f050011;
         public static final int btnForward=0x7f050004;
         public static final int btnGO=0x7f050001;
         public static final int btnGoBack=0x7f050003;
-        public static final int btnOKRss=0x7f050010;
         public static final int categoryLv=0x7f050006;
         public static final int categoryname_edit=0x7f050005;
-        public static final int expGroup=0x7f050013;
+        public static final int expGroup=0x7f05000f;
         public static final int item_cb=0x7f050009;
         public static final int item_tv=0x7f050008;
         public static final int linearLayoutMain=0x7f05000a;
         public static final int myListItem=0x7f050007;
-        public static final int rssLv=0x7f050012;
+        public static final int rssLv=0x7f05000e;
         public static final int rssaddr_edit=0x7f05000d;
         public static final int rssname_edit=0x7f05000c;
-        public static final int spCategory=0x7f05000f;
-        public static final int tab1=0x7f050014;
-        public static final int textView1=0x7f05000e;
+        public static final int tab1=0x7f050010;
         public static final int url=0x7f050000;
         public static final int webView1=0x7f050002;
-        public static final int wv=0x7f050015;
+        public static final int wv=0x7f050011;
     }
     public static final class layout {
         public static final int browse=0x7f030000;
