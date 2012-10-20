@@ -10,7 +10,7 @@
 	<EditText android:id="@+id/rssaddr_edit"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:capitalize="none" android:textAppearance="?android:attr/textAppearanceMedium"
-		android:hint="在此输入RSS地址" />
+		android:text="http://"/>
 	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
 		android:text="请选择分类:" android:textAppearance="?android:attr/textAppearanceLarge"
 		android:layout_height="wrap_content"></TextView>
