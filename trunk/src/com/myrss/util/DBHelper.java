@@ -37,11 +37,30 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS RssAddr(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name NVARCHAR(20),URL NVARCHAR(100), CategoryId INTEGER,Flag INTEGER);");
 		db.execSQL("CREATE TABLE IF NOT EXISTS Category(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name NVARCHAR(20));");
+
+		db.execSQL("INSERT INTO Category(Name) VALUES('IT世界');");
+		db.execSQL("INSERT INTO Category(Name) VALUES('财经');");
+		db.execSQL("INSERT INTO Category(Name) VALUES('时政要闻');");
+		db.execSQL("INSERT INTO Category(Name) VALUES('技术博客');");
+		db.execSQL("INSERT INTO Category(Name) VALUES('英语学习');");
+		db.execSQL("INSERT INTO Category(Name) VALUES('读书文娱');");
+
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('Android中文','http://rss.tgbus.com/android.xml','1','1');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('CSDN资讯','http://articles.csdn.net/api/rss.php?tid=1008','1','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('每日英语','http://english-feed.beanwoo.com','1','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('婚姻物语','http://rss.sina.com.cn/eladies/qinggan/hunyin50.xml','2','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('分享热点','http://www.sahot.com/feed','2','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('FT中文网','http://www.ftchinese.com/rss/column/007000004','3','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('南方周末','http://www.infzm.com/rss/home/rss2.0.xml','3','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('联合早报','http://www.zaobao.com/yl/yl.xml','4','0');");
+		db.execSQL("INSERT INTO RssAddr(Name,URL,CategoryId,Flag) VALUES('豆瓣','http://www.douban.com/feed/review/book','5','0');");
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+		db.execSQL("DROP TABLE IF EXISTS RssAddr");
+		db.execSQL("DROP TABLE IF EXISTS Category");
+		onCreate(db);
 	}
 
 	// 执行SQL语句

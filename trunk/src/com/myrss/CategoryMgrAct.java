@@ -174,6 +174,7 @@ public class CategoryMgrAct extends Activity {
 							dbhelper.ExeSQL(dbhelper,
 									"DELETE FROM RssAddr WHERE CategoryId='"
 											+ id + "'");// 删除分类下的RSS
+							data.remove(value);
 						}
 						adapter.notifyDataSetChanged();// 刷新数据
 					}
@@ -207,8 +208,9 @@ public class CategoryMgrAct extends Activity {
 								+ tvcname.getText().toString() + "' WHERE Id='"
 								+ id + "'";
 						dbhelper.ExeSQL(dbhelper, sql);
-
-						adapter.notifyDataSetChanged();
+						list = (ListView) findViewById(R.id.categoryLv);
+						adapter = new MyAdapter(CategoryMgrAct.this, getData());
+						list.setAdapter(adapter);
 					}
 				});
 		builder.setNegativeButton(R.string.btn_cancel,
