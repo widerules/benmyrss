@@ -45,7 +45,6 @@ public class MainAct extends Activity implements OnItemClickListener,
 		setContentView(R.layout.mainui);
 		detector = new GestureDetector(this);
 		showListView("");
-
 	}
 
 	// 获取数据
@@ -77,10 +76,15 @@ public class MainAct extends Activity implements OnItemClickListener,
 		} else {// 不为空获取指定ID的RSS
 			rssAddr = dbhelper.GetRSSByID(dbhelper, id);
 		}
-		String url = rssAddr.getURL();
-		Log.d("MyDebug", "url: " + url);
-		feed = getFeed(url);
-
+		if(rssAddr.getURL()!=null)
+		{	
+			String url = rssAddr.getURL();
+			Log.d("MyDebug", "url: " + url);
+			feed = getFeed(url);
+		}else {
+			setTitle("请选择您要阅读的RSS");
+			return;
+		}
 		ListView itemlist = (ListView) findViewById(R.id.RssList);
 		if (feed == null) {
 			setTitle("RSS源地址无效,请您重新选择");
